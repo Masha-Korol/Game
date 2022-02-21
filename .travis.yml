@@ -1,0 +1,15 @@
+os: linux
+language: java
+jdk: oraclejdk15
+branches:
+  only:
+    - master
+deploy:
+    provider: script
+    skip_cleanup: true
+    script: "mvn clean package -P deploy; /bin/bash scripts/deploy.sh $TOMCAT_PROD_IP"
+    on:
+      branch: master
+      condition: $DEPLOY = yes
+after_script:
+  - bash ./scripts/tg_alerts.sh
